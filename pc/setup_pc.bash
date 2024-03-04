@@ -1,127 +1,198 @@
 #!/bin/bash
 
-# Função para exibir uma barra de progresso
-progress_bar() {
-    local duration=${1}
-    local columns=$(tput cols)
-    local progress_char="#"
-    local space_char=" "
-    local sleep_duration=$(echo "scale=2; $duration / $columns" | bc)
-    
-    for ((i = 0; i <= columns; i++)); do
-        printf "\r%-${columns}s" "${progress_char:0:i}${space_char:i:columns}"
-        sleep $sleep_duration
-    done
-}
+# Script para configuração inicial de um PC com Ubuntu/Debian
+# Autor: Cauan Victor
 
-# Função para exibir mensagens simplificadas
-show_message() {
-    local message="${1}"
-    echo "${message}..."
-    sleep 1
-}
+# Exibir nome personalizado no terminal
+figlet -f slant "Cauan"
 
 # Função para atualização do sistema e instalação de pacotes básicos
 install_basic_packages() {
-    show_message "Atualizando e instalando pacotes básicos"
-    sudo apt update -y &>/dev/null
-    sudo apt upgrade -y &>/dev/null
-    sudo apt install -y curl git python3 python3-pip nano vim ffmpeg &>/dev/null
+    sudo apt update -y
+    sudo apt upgrade -y
+    sudo apt install -y curl git python3 python3-pip nano vim ffmpeg
+
+    echo -n "Atualizando pacotes básicos: ["
+    for i in {1..10}; do
+        echo -n "#"
+        sleep 1
+    done
+    echo "] Concluído."
 }
 
 # Função para instalação do Homebrew
 install_homebrew() {
-    show_message "Instalando Homebrew"
     if ! command -v brew &>/dev/null; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &>/dev/null
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "Homebrew já está instalado."
     fi
+
+    echo "Instalação do Homebrew concluída."
 }
 
 # Função para instalação de ferramentas adicionais via Snap
 install_snap_tools() {
-    show_message "Instalando ferramentas adicionais via Snap"
     if ! command -v code &>/dev/null; then
-        sudo snap install code --classic &>/dev/null
+        sudo snap install code --classic
     else
         echo "Ferramentas adicionais via Snap já estão instaladas."
     fi
+
+    echo "Instalação de ferramentas adicionais via Snap concluída."
 }
 
 # Função para instalação de softwares adicionais
 install_additional_software() {
-    show_message "Instalando softwares adicionais"
-    if ! command -v obs &>/dev/null || ! command -v vlc &>/dev/null || ! command -v discord &>/dev/null || ! command -v spotify &>/dev/null; then
-        sudo add-apt-repository -y ppa:obsproject/obs-studio &>/dev/null
-        sudo apt update &>/dev/null
-        sudo apt install -y obs-studio &>/dev/null
-        sudo snap install vlc discord spotify &>/dev/null
+    if ! command -v obs &>/dev/null; then
+        sudo add-apt-repository -y ppa:obsproject/obs-studio
+        sudo apt update
+        sudo apt install -y obs-studio
     else
-        echo "Softwares adicionais já estão instalados."
+        echo "OBS Studio já está instalado."
     fi
+
+    if ! command -v vlc &>/dev/null || ! command -v discord &>/dev/null || ! command -v spotify &>/dev/null; then
+        sudo snap install vlc discord spotify
+    else
+        echo "Softwares adicionais via Snap já estão instalados."
+    fi
+
+    echo "Instalação de softwares adicionais concluída."
 }
 
 # Função para instalação do Docker
 install_docker() {
-    show_message "Instalando Docker"
     if ! command -v docker &>/dev/null; then
-        sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release &>/dev/null
-        sudo mkdir -p /etc/apt/keyrings &>/dev/null
-        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker-archive-keyring.gpg &>/dev/null
+        sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+        sudo mkdir -p /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker-archive-keyring.gpg
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo apt update &>/dev/null
-        sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &>/dev/null
+        sudo apt update
+        sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     else
         echo "Docker já está instalado."
     fi
+
+    echo "Instalação do Docker concluída."
 }
 
 # Função para instalação do VirtualBox
 install_virtualbox() {
-    show_message "Instalando VirtualBox"
     if ! command -v vboxmanage &>/dev/null; then
-        sudo apt install -y virtualbox &>/dev/null
+        sudo apt install -y virtualbox
     else
         echo "VirtualBox já está instalado."
     fi
+
+    echo "Instalação do VirtualBox concluída."
 }
 
 # Função para instalação do Vagrant
 install_vagrant() {
-    show_message "Instalando Vagrant"
     if ! command -v vagrant &>/dev/null; then
-        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg &>/dev/null
-        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list &>/dev/null
-        sudo apt update &>/dev/null
-        sudo apt install -y vagrant &>/dev/null
+        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update
+        sudo apt install -y vagrant
     else
         echo "Vagrant já está instalado."
     fi
+
+    echo "Instalação do Vagrant concluída."
 }
 
-# Função para instalação do Node.js e npm
-install_nodejs_npm() {
-    show_message "Instalando Node.js e npm"
-    if ! command -v node &>/dev/null || ! command -v npm &>/dev/null; then
-        curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &>/dev/null
-        sudo apt install -y nodejs &>/dev/null
+# Função para instalação do Node.js LTS
+install_nodejs() {
+    if ! command -v node &>/dev/null || ! node -v | grep -q "v14"; then
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+        sudo apt install -y nodejs
+        sudo npm install -g npm@latest
     else
-        echo "Node.js e npm já estão instalados."
+        echo "Node.js LTS já está instalado."
     fi
+
+    echo "Instalação do Node.js LTS concluída."
 }
 
-# Função principal para execução das instalações
-main() {
-    install_basic_packages
-    install_homebrew
-    install_snap_tools
-    install_additional_software
-    install_docker
-    install_virtualbox
-    install_vagrant
-    install_nodejs_npm
+# Função para instalação do Yarn
+install_yarn() {
+    if ! command -v yarn &>/dev/null; then
+        sudo npm install -g yarn@latest
+    else
+        echo "Yarn já está instalado."
+    fi
+
+    echo "Instalação do Yarn concluída."
 }
 
-# Execução da função principal com uma barra de progresso
-main & progress_bar 80
+# Função para instalar a fonte Inter
+install_inter_font() {
+    if [ ! -d /usr/share/fonts/inter ]; then
+        wget -O /tmp/Inter-4.0.zip https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip
+        sudo unzip -o /tmp/Inter-4.0.zip -d /usr/share/fonts/inter
+        rm /tmp/Inter-4.0.zip
+        sudo fc-cache -f -v
+        echo "Fonte Inter instalada com sucesso."
+    else
+        echo "A pasta da fonte Inter já existe."
+    fi
+
+    echo "Instalação da fonte Inter concluída."
+}
+
+# Função para instalar a fonte JetBrains Mono
+install_jetbrains_mono_font() {
+    if [ ! -d /usr/share/fonts/jetbrains-mono ]; then
+        wget -O /tmp/JetBrainsMono-2.304.zip https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip
+        sudo unzip -o /tmp/JetBrainsMono-2.304.zip -d /usr/share/fonts/jetbrains-mono
+        rm /tmp/JetBrainsMono-2.304.zip
+        sudo fc-cache -f -v
+        echo "Fonte JetBrains Mono instalada com sucesso."
+    else
+        echo "A pasta da fonte JetBrains Mono já existe."
+    fi
+
+    echo "Instalação da fonte JetBrains Mono concluída."
+}
+
+# Função para instalação do Oh My Zsh e configuração do tema Powerlevel9k
+install_oh_my_zsh() {
+    if [ ! -d ~/.oh-my-zsh ]; then
+        sudo apt install -y zsh
+        sudo usermod -s /usr/bin/zsh $(whoami)
+        sudo apt install -y zsh-theme-powerlevel9k
+        echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc
+        sudo apt install -y zsh-syntax-highlighting
+        echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+        for user in $(ls /home); do
+            sudo usermod -s /usr/bin/zsh $user
+            sudo chsh -s /usr/bin/zsh $user
+            sudo cp ~/.zshrc /home/$user/
+            sudo chown $user:$user /home/$user/.zshrc
+            sudo -u $user bash -c 'sudo apt install -y zsh-theme-powerlevel9k'
+            sudo -u $user bash -c 'echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc'
+            sudo -u $user bash -c 'sudo apt install -y zsh-syntax-highlighting'
+            sudo -u $user bash -c 'echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc'
+            sudo -u $user bash -c 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+        done
+    else
+        echo "Oh My Zsh já está instalado."
+    fi
+
+    echo "Instalação do Oh My Zsh e configuração do tema Powerlevel9k concluídas."
+}
+
+# Execução das funções
+install_basic_packages
+install_homebrew
+install_snap_tools
+install_additional_software
+install_docker
+install_virtualbox
+install_vagrant
+install_nodejs
+install_yarn
+install_inter_font
+install_jetbrains_mono_font
+install_oh_my_zsh
