@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Função para atualização do sistema e instalação de pacotes básicos
 install_basic_packages() {
@@ -9,7 +9,7 @@ install_basic_packages() {
 
 # Função para instalação do Homebrew
 install_homebrew() {
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
 # Função para instalação de ferramentas adicionais via Snap
@@ -30,7 +30,7 @@ install_docker() {
     sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
     sudo mkdir -p /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker-archive-keyring.gpg
-    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt update
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 }
@@ -43,7 +43,7 @@ install_virtualbox() {
 # Função para instalação do Vagrant
 install_vagrant() {
     wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    sudo echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
     sudo apt update
     sudo apt install -y vagrant
 }
@@ -66,27 +66,19 @@ update_npm() {
 
 # Função para instalar a fonte Inter
 install_inter_font() {
-    temp_dir=$(mktemp -d)
-    wget -P "$temp_dir" https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip
-    unzip "$temp_dir/Inter-4.0.zip" -d "$temp_dir"
-    sudo mkdir -p /usr/share/fonts/inter
-    sudo mv "$temp_dir/Inter-4.0/extras/otf"/* /usr/share/fonts/inter
-    sudo mv "$temp_dir/Inter-4.0/extras/ttf"/* /usr/share/fonts/inter
+    wget -O /tmp/Inter-4.0.zip https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip
+    sudo unzip -o /tmp/Inter-4.0.zip -d /usr/share/fonts/inter
+    rm /tmp/Inter-4.0.zip
     sudo fc-cache -f -v
-    rm -rf "$temp_dir"
     echo "Fonte Inter instalada com sucesso."
 }
 
 # Função para instalar a fonte JetBrains Mono
 install_jetbrains_mono_font() {
-    temp_dir=$(mktemp -d)
-    wget -P "$temp_dir" https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip
-    unzip "$temp_dir/JetBrainsMono-2.304.zip" -d "$temp_dir"
-    sudo mkdir -p /usr/share/fonts/jetbrains-mono
-    sudo mv "$temp_dir/JetBrainsMono-2.304/fonts/ttf"/* /usr/share/fonts/jetbrains-mono
-    sudo mv "$temp_dir/JetBrainsMono-2.304/fonts/variable"/* /usr/share/fonts/jetbrains-mono
+    wget -O /tmp/JetBrainsMono-2.304.zip https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip
+    sudo unzip -o /tmp/JetBrainsMono-2.304.zip -d /usr/share/fonts/jetbrains-mono
+    rm /tmp/JetBrainsMono-2.304.zip
     sudo fc-cache -f -v
-    rm -rf "$temp_dir"
     echo "Fonte JetBrains Mono instalada com sucesso."
 }
 
@@ -98,7 +90,7 @@ install_oh_my_zsh() {
     echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc
     sudo apt install -y zsh-syntax-highlighting
     echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 }
 
 # Execução das funções
@@ -115,4 +107,3 @@ update_npm
 install_inter_font
 install_jetbrains_mono_font
 install_oh_my_zsh
-
