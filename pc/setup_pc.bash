@@ -4,13 +4,13 @@
 # Autor: Cauan Victor
 
 echo " ";
-echo "   ####     ###    ##   ##    ###    ##   ## ";
-echo "  ##  ##   ## ##   ##   ##   ## ##   ###  ## ";
-echo " ##       ##   ##  ##   ##  ##   ##  #### ## ";
-echo " ##       ##   ##  ##   ##  ##   ##  ####### ";
-echo " ##       #######  ##   ##  #######  ## #### ";
-echo "  ##  ##  ##   ##  ##   ##  ##   ##  ##  ### ";
-echo "   ####   ##   ##   #####   ##   ##  ##   ## ";
+echo -e "\e[34m   ####     ###    ##   ##    ###    ##   ## \e[0m";
+echo -e "\e[34m  ##  ##   ## ##   ##   ##   ## ##   ###  ## \e[0m";
+echo -e "\e[34m ##       ##   ##  ##   ##  ##   ##  #### ## \e[0m";
+echo -e "\e[34m ##       ##   ##  ##   ##  ##   ##  ####### \e[0m";
+echo -e "\e[34m ##       #######  ##   ##  #######  ## #### \e[0m";
+echo -e "\e[34m  ##  ##  ##   ##  ##   ##  ##   ##  ##  ### \e[0m";
+echo -e "\e[34m   ####   ##   ##   #####   ##   ##  ##   ## \e[0m";
 echo " ";
 
 # Função para atualização do sistema e instalação de pacotes básicos
@@ -26,10 +26,10 @@ install_homebrew() {
     if ! command -v brew &>/dev/null; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1
     else
-        echo "Homebrew já está instalado."
+        echo -e "Homebrew já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Homebrew concluída."
+    echo -e "Instalação do Homebrew concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação de ferramentas adicionais via Snap
@@ -37,10 +37,10 @@ install_snap_tools() {
     if ! command -v code &>/dev/null; then
         sudo snap install code --classic > /dev/null 2>&1
     else
-        echo "Ferramentas adicionais via Snap já estão instaladas."
+        echo -e "Ferramentas adicionais via Snap já estão instaladas. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação de ferramentas adicionais via Snap concluída."
+    echo -e "Instalação de ferramentas adicionais via Snap concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação de softwares adicionais
@@ -50,16 +50,16 @@ install_additional_software() {
         sudo apt update > /dev/null 2>&1
         sudo apt install -y obs-studio > /dev/null 2>&1
     else
-        echo "OBS Studio já está instalado."
+        echo -e "OBS Studio já está instalado. \e[32m✅\e[0m"
     fi
 
     if ! command -v vlc &>/dev/null || ! command -v discord &>/dev/null || ! command -v spotify &>/dev/null; then
         sudo snap install vlc discord spotify > /dev/null 2>&1
     else
-        echo "Softwares adicionais via Snap já estão instalados."
+        echo -e "Softwares adicionais via Snap já estão instalados. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação de softwares adicionais concluída."
+    echo -e "Instalação de softwares adicionais concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do Docker
@@ -72,10 +72,10 @@ install_docker() {
         sudo apt update > /dev/null 2>&1
         sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin > /dev/null 2>&1
     else
-        echo "Docker já está instalado."
+        echo -e "\e[34mDocker\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Docker concluída."
+    echo -e "Instalação do \e[34mDocker\e[0m concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do VirtualBox
@@ -83,10 +83,10 @@ install_virtualbox() {
     if ! command -v vboxmanage &>/dev/null; then
         sudo apt install -y virtualbox > /dev/null 2>&1
     else
-        echo "VirtualBox já está instalado."
+        echo -e "\e[34mVirtualBox\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do VirtualBox concluída."
+    echo -e "Instalação do \e[34mVirtualBox\e[0m concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do Vagrant
@@ -97,10 +97,10 @@ install_vagrant() {
         sudo apt update > /dev/null 2>&1
         sudo apt install -y vagrant > /dev/null 2>&1
     else
-        echo "Vagrant já está instalado."
+        echo -e "\e[34mVagrant\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Vagrant concluída."
+    echo -e "Instalação do \e[34mVagrant\e[0m concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do Node.js LTS
@@ -110,10 +110,10 @@ install_nodejs() {
         sudo apt install -y nodejs > /dev/null 2>&1
         sudo npm install -g npm@latest > /dev/null 2>&1
     else
-        echo "Node.js LTS já está instalado."
+        echo -e "\e[32mNode.js LTS\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Node.js LTS concluída."
+    echo -e "Instalação do \e[32mNode.js LTS\e[0m concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do Yarn
@@ -121,10 +121,10 @@ install_yarn() {
     if ! command -v yarn &>/dev/null; then
         sudo npm install -g yarn@latest > /dev/null 2>&1
     else
-        echo "Yarn já está instalado."
+        echo -e "\e[32mYarn\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Yarn concluída."
+    echo -e "Instalação do \e[32mYarn\e[0m concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalar a fonte Inter
@@ -134,12 +134,12 @@ install_inter_font() {
         sudo unzip -o /tmp/Inter-4.0.zip -d /usr/share/fonts/inter > /dev/null 2>&1
         rm /tmp/Inter-4.0.zip
         sudo fc-cache -f -v > /dev/null 2>&1
-        echo "Fonte Inter instalada com sucesso."
+        echo -e "Fonte Inter instalada com sucesso. \e[32m✅\e[0m"
     else
-        echo "A pasta da fonte Inter já existe."
+        echo -e "A pasta da fonte Inter já existe. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação da fonte Inter concluída."
+    echo -e "Instalação da fonte Inter concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalar a fonte JetBrains Mono
@@ -149,12 +149,12 @@ install_jetbrains_mono_font() {
         sudo unzip -o /tmp/JetBrainsMono-2.304.zip -d /usr/share/fonts/jetbrains-mono > /dev/null 2>&1
         rm /tmp/JetBrainsMono-2.304.zip
         sudo fc-cache -f -v > /dev/null 2>&1
-        echo "Fonte JetBrains Mono instalada com sucesso."
+        echo -e "Fonte JetBrains Mono instalada com sucesso. \e[32m✅\e[0m"
     else
-        echo "A pasta da fonte JetBrains Mono já existe."
+        echo -e "A pasta da fonte JetBrains Mono já existe. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação da fonte JetBrains Mono concluída."
+    echo -e "Instalação da fonte JetBrains Mono concluída. \e[32m✅\e[0m"
 }
 
 # Função para instalação do Oh My Zsh e configuração do tema Powerlevel9k
@@ -179,10 +179,10 @@ install_oh_my_zsh() {
             sudo -u $user bash -c 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"' > /dev/null 2>&1
         done
     else
-        echo "Oh My Zsh já está instalado."
+        echo -e "\e[32mOh My Zsh\e[0m já está instalado. \e[32m✅\e[0m"
     fi
 
-    echo "Instalação do Oh My Zsh e configuração do tema Powerlevel9k concluídas."
+    echo -e "Instalação do Oh My Zsh e configuração do tema Powerlevel9k concluídas. \e[32m✅\e[0m"
 }
 
 # Execução das funções
