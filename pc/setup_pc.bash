@@ -90,7 +90,14 @@ install_oh_my_zsh() {
     echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc
     sudo apt install -y zsh-syntax-highlighting
     echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    for user in $(ls /home); do
+        sudo usermod -s /usr/bin/zsh $user
+        sudo cp ~/.zshrc /home/$user/
+        sudo chown $user:$user /home/$user/.zshrc
+        sudo echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> /home/$user/.zshrc
+        sudo echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> /home/$user/.zshrc
+    done
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"    
 }
 
 # Execução das funções
