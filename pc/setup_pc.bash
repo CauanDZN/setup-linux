@@ -82,7 +82,7 @@ install_jetbrains_mono_font() {
     echo "Fonte JetBrains Mono instalada com sucesso."
 }
 
-# Função para instalação do Oh My Zsh e configuração do tema Powerlevel9k
+# Função para instalar o Oh My Zsh e configurar o tema Powerlevel9k
 install_oh_my_zsh() {
     sudo apt install -y zsh
     sudo usermod -s /usr/bin/zsh $(whoami)
@@ -92,10 +92,13 @@ install_oh_my_zsh() {
     echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
     for user in $(ls /home); do
         sudo usermod -s /usr/bin/zsh $user
+        sudo chsh -s /usr/bin/zsh $user
         sudo cp ~/.zshrc /home/$user/
         sudo chown $user:$user /home/$user/.zshrc
-        sudo echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> /home/$user/.zshrc
-        sudo echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> /home/$user/.zshrc
+        sudo -u $user bash -c 'sudo apt install -y zsh-theme-powerlevel9k'
+        sudo -u $user bash -c 'echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc'
+        sudo -u $user bash -c 'sudo apt install -y zsh-syntax-highlighting'
+        sudo -u $user bash -c 'echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc'
     done
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"    
 }
