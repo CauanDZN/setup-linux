@@ -82,6 +82,7 @@ install_nodejs() {
     if ! command -v node &>/dev/null || ! node -v | grep -q "v14"; then
         curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
         sudo apt install -y nodejs
+        sudo npm install -g npm@latest
     else
         echo "Node.js LTS já está instalado."
     fi
@@ -96,38 +97,29 @@ install_yarn() {
     fi
 }
 
-# Função para atualização do NPM
-update_npm() {
-    if ! command -v npm &>/dev/null; then
-        sudo npm install -g npm@latest
-    else
-        echo "NPM já está instalado."
-    fi
-}
-
 # Função para instalar a fonte Inter
 install_inter_font() {
-    if [ ! -f /usr/share/fonts/inter/Inter-Regular.ttf ]; then
+    if [ ! -d /usr/share/fonts/inter ]; then
         wget -O /tmp/Inter-4.0.zip https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip
         sudo unzip -o /tmp/Inter-4.0.zip -d /usr/share/fonts/inter
         rm /tmp/Inter-4.0.zip
         sudo fc-cache -f -v
         echo "Fonte Inter instalada com sucesso."
     else
-        echo "Fonte Inter já está instalada."
+        echo "A pasta da fonte Inter já existe."
     fi
 }
 
 # Função para instalar a fonte JetBrains Mono
 install_jetbrains_mono_font() {
-    if [ ! -f /usr/share/fonts/jetbrains-mono/JetBrainsMono-Regular.ttf ]; then
+    if [ ! -d /usr/share/fonts/jetbrains-mono ]; then
         wget -O /tmp/JetBrainsMono-2.304.zip https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip
         sudo unzip -o /tmp/JetBrainsMono-2.304.zip -d /usr/share/fonts/jetbrains-mono
         rm /tmp/JetBrainsMono-2.304.zip
         sudo fc-cache -f -v
         echo "Fonte JetBrains Mono instalada com sucesso."
     else
-        echo "Fonte JetBrains Mono já está instalada."
+        echo "A pasta da fonte JetBrains Mono já existe."
     fi
 }
 
@@ -166,7 +158,6 @@ install_virtualbox
 install_vagrant
 install_nodejs
 install_yarn
-update_npm
 install_inter_font
 install_jetbrains_mono_font
 install_oh_my_zsh
